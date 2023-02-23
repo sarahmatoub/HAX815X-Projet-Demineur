@@ -1,19 +1,27 @@
-# Define UI for miles per gallon app ----
-ui <- pageWithSidebar(
+library(shiny)
+
+ui <- fluidPage(
   
-  # App title ----
   titlePanel("Jeu du démineur"),
   
-  # Sidebar panel for inputs ----
-  sidebarPanel(
+  sidebarLayout(
+    sidebarPanel(
+      selectInput("Niveau", "Choisir un niveau:",
+                  choices=c("Facile", "Moyen", "Difficile"),
+                  selected = "Facile")
+    ),
     
-    # Input: Selector for variable to plot against mpg ----
-    selectInput("select", label = h3("Choisir un niveau"),
-                choices = list(" ", "Facile", "Moyen", "Difficile")
-                  ),
-    
-  ),
-  
-  # Main panel for displaying outputs ----
-  mainPanel()
+    mainPanel(
+      fluidRow(
+        column(width = 12,
+               h4("Cliquer sur la case"),
+               h4("Cliquer sur la case pour mettre un drapeau"))
+      ),
+      
+      fluidRow(
+        column(width = 12,
+               uiOutput("Grille_de_jeu"))
+      )
+    )
+  )
 )
