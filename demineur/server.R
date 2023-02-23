@@ -1,7 +1,10 @@
 library(shiny)
 library(gridExtra)
 
-server <- function(input, output){
+server <- function(input, output, session){
+  
+ Niveau <- eventReactive(input$Niveau)
+ output$Grille_de_jeu <- renderPlot({ 
   
   #Définir la taille de la grille et le nombre de mines en fonction du niveau
   if (input$Niveau == "Facile"){
@@ -17,28 +20,28 @@ server <- function(input, output){
     n_cols <- 24
     n_mines <- 99
   }
-
+})
 # Créer une grille vide
-grid <- matrix(0, n_rows, n_cols)
+grid$data <- matrix(0, n_rows, n_cols)
 
 # Générer des nombres de mines à des endroits aléatoires
-mine_end <- sample(n_rows * n_cols, n_mines)
+mine_end$data <- sample(n_rows * n_cols, n_mines)
 
 #Placer des mines dans la grille 
-grid[mine_end] <- -1
+grid$data[mine_end$data] <- -1
 
 #Boucle pour chaque cellule dans la grille
 for (i in 1:n_rows){
   for (j in 1:n_cols){
     #Vérifier s'il y a une mine dans la cellule
-    if (grid[i,j]== -1){
+    if (grid$data[i,j]== -1){
       next #s'il y a une mine  passer à une autre cellule
     }
     #compter le nombre de mines voisines
-   n_voisins <- sum(grid[max(1, i-1) : min(n_rows, i+1), max(1, j-1) : min(n_cols, j+1)] == -1)
+   n_voisins <- sum(grid$data[max(1, i-1) : min(n_rows, i+1), max(1, j-1) : min(n_cols, j+1)] == -1)
    
    #définir la valeur de la cellule sur le nb de mines voisines
-   grid[i,j] <- n_voisins
+   grid$data[i,j] <- n_voisins
      
   }
 }
@@ -69,6 +72,8 @@ reveler_case <- function(i, j){
   addClass(paste0("td[", i, ",", j, "]"), "révélée")
 }
 
-
 }
+
+
+
 

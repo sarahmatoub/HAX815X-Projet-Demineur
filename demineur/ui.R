@@ -8,13 +8,14 @@ ui <- fluidPage(
     sidebarPanel(
       selectInput("Niveau", "Choisir un niveau:",
                   choices=c("Facile", "Moyen", "Difficile"),
-                  selected = "Facile")
+                  selected = "Facile"),
+      
     ),
     
     mainPanel(
-      fluidRow(
+      fluidRow( 
         column(width = 12,
-               h4("Cliquer sur la case"),
+               h4("Cliquer sur la case pour connaître sa valeur"),
                h4("Cliquer sur la case pour mettre un drapeau"))
       ),
       
@@ -25,3 +26,4 @@ ui <- fluidPage(
     )
   )
 )
+
