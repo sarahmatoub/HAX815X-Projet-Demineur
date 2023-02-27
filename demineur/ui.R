@@ -3,9 +3,9 @@ library(shiny)
 ui <- fluidPage(
   
   titlePanel("Démineur"),
-  textOutput("Bienvenue dans le jeu du Démineur , vous avez ci-dessous deux option : 
+  textOutput("Bienvenue dans le jeu du Démineur , vous avez ci-dessous deux options : 
              soit vous jouez par sélection du niveau  que vous désirez
-             soit par personnalisation du jeu selons vos gouts 
+             soit par personnalisation du jeu selons vos souhaits 
              A vous de jouer!!! "),
   
   sidebarLayout(
