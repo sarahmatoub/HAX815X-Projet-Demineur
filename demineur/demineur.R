@@ -17,7 +17,7 @@ ui <- fluidPage(
                                       selected = "Facile")
                    ),
                    column(width = 4,
-                          icon("flag", class = "mr-1", title = "Number of flags"),
+                          icon("flag", class = "fa-solid fa-flag-pennant", title = "Number of flags", lib = "font-awesome"),
                           tags$style(".fa-flag {color:#ff0000}"),  
                           tags$span(id = "num-flags", "0")
                    ),
