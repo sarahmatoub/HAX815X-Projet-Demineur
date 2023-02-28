@@ -18,7 +18,7 @@ ui <- fluidPage(
       numericInput("n_cols", "Nombre de colonnes", value = 10, min = 1),
       numericInput("n_mines", "Nombre de mines", value = 10, min = 1),
       actionButton("nouvelle partie ", "jouer "))
-<<<<<<< HEAD
+
     
   ),
   
@@ -32,7 +32,7 @@ ui <- fluidPage(
     fluidRow(
       column(width = 12,
              uiOutput("Grille_de_jeu"))
-=======
+
       
     ),
     
@@ -47,7 +47,7 @@ ui <- fluidPage(
         column(width = 12,
                uiOutput("Grille_de_jeu"))
       )
->>>>>>> 87f8749904c01d633d3cc0e48453f0cfdd74f5a8
+
     )
   )
 
