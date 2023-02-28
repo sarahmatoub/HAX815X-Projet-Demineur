@@ -4,7 +4,8 @@
 
 Contact :
 
-sarah.matoub@etu.umontpellier.fr \\
+sarah.matoub@etu.umontpellier.fr
+
 thizir.abchiche@etu.umontpellier.fr
 
 
