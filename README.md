@@ -1,6 +1,6 @@
 # Projet Démineur :
 
-Le but de ce projet est de créer une application Shiny permettant de jouer au démineur.
+Le but de ce projet est de créer une librairie R incluant une application Shiny permettant de jouer au démineur.
 
 ## Règles du jeu :
 
@@ -18,7 +18,9 @@ et en-dessous à droite d’elle).
 
 6. Si toutes les cases vides sont découvertes sans déclencher de mines , le joueur gagne la partie.
 
+## Projet
 
+Le fichier "minesweeper2.R" permet de jouer au démineur à plusieurs niveaux (Facile, Moyen , Difficile) en utilisant la fonction `minesweeper` de la librairie `Rbeast`.
 
 
 ## Contact :
