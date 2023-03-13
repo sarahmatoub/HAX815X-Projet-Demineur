@@ -20,7 +20,9 @@ et en-dessous à droite d’elle).
 
 ## Projet
 
-Le fichier "minesweeper2.R" permet de jouer au démineur à plusieurs niveaux (Facile, Moyen , Difficile) , ou en personnalisant votre grille selon le choix des lignes , colonnes et mines en utilisant la fonction `minesweeper` de la librairie "Rbeast".
+- Le fichier "minesweeper2.R" permet de jouer au démineur à plusieurs niveaux (Facile, Moyen , Difficile) , ou en personnalisant votre grille selon le choix des lignes , colonnes et mines en utilisant la fonction `minesweeper` de la librairie "Rbeast".
+
+- Le fichier "minesweeper1.R" permet de jouer au démineur en personnalisant la grille de votre jeu en utilisant la fonction `minesweeper(height, width, prob)`.
 
 
 ## Contact :
