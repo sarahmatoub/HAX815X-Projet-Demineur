@@ -3,10 +3,7 @@ library(shiny)
 ui <- fluidPage(
   
   titlePanel("Démineur"),
-  textOutput("Bienvenue dans le jeu du Démineur , vous avez ci-dessous deux options : 
-             soit vous jouez par sélection du niveau  que vous désirez
-             soit par personnalisation du jeu selons vos souhaits 
-             A vous de jouer!!! "),
+ 
   
   sidebarLayout(
     sidebarPanel(
@@ -31,26 +28,18 @@ ui <- fluidPage(
     
     fluidRow(
       column(width = 12,
-             uiOutput("Grille_de_jeu"))
+             uiOutput("Grille_de_jeu"));
 
       
-    ),
-    
-    mainPanel(
-      fluidRow( 
-        column(width = 12,
-               h4("Cliquer sur la case pour connaître sa valeur"),
-              h4("Cliquer sur la case pour mettre un drapeau"))
-      ),
-      
+   mainPanel(
       fluidRow(
-        column(width = 12,
-               uiOutput("Grille_de_jeu"))
-      )
+        column(width = 12, 
+               div(id = "game_board"))
+      
 
     )
   )
-
+)
 
 
 
