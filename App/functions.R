@@ -61,7 +61,7 @@ generate_grid <- function(rows, cols, mines) {
   
 }
 
-#Fonction pour compter les mines
+#Fonction pour compter le nombre de mines dans la grille
 mines_count <- function(grid){
   mines <- 0
   for(r in 1:nrow(grid)){
@@ -74,67 +74,59 @@ mines_count <- function(grid){
   return(mines)
 }
 
+
+
+
 # Fonction pour révéler la case sélectionnée
 
+
+#gérer le clic groit
+clic_droit <- function(event){
+  if(event$type == "click" && event$button == "right"){
+    cat("Right mouse button clicked at (", event$x, ", ", event$y, ")\n")
+  }
+}
+
+
+#fonction pour mettre à jour le nombre de drapeaux
+flag <- function(grid){
+  nb_flags <- 0
+  for(r in 1:nrow(grid)){
+    for(c in 1:ncol(grid)){
+      if(clic_droit(grid[r,c])==TRUE){
+         grid[r,c] <- emojifont::emoji("flag")
+         print(mines_count(grid) - 1)
+      }
+    }
+  }
+}
+
+
 reveler_case <- function(grid , r, c){
-  #si la case contient une mine 
-  if(grid[r,c]=="M"){
+  if(grid[r,c] == "M"){
+    # Si la case contient une mine, révéler toutes les mines et afficher "Game over!"
     grid[grid=="M"] <- emojifont::emoji("bomb")
     print(grid)
     print("Game over!")
-    }
-    if(grid[r,c]!="M" || grid[r,c]!=""){
-    return(grid[r,c])
-    }
-  if(grid[r,c]==""){
-    for(i in -1:1){
-      for(j in -1:1){
-        if(grid[r+i, c+j]==""){
-          reveler_case(grid, r+i, c+j)
+  } else if (grid[r,c] == "") {
+    # Si la case est vide, révéler toutes les cases adjacentes qui ne contiennent pas de mines
+    for (i in -1:1) {
+      for (j in -1:1) {
+        if (r+i >= 1 && r+i <= nrow(grid) || c+j >= 1 && c+j <= ncol(grid)) {
+          if (grid[r+i, c+j] != "M") {
+            grid[r+i, c+j] <- "R"
+            grid <- reveler_case(grid, r+i, c+j)
+          } else if(grid[r,c]!="M" || grid[r,c]!="") {
+            grid[r,c] <- "R"
+            return(grid)
         }
-      }
+      } 
+     }
     }
-  }
+  } 
   
+  return(grid)
 }
-
-
-
-reveler_case <- function(grid, r, c) {
-  if (grid[r, c] == "M") {
-    grid[grid == "M"] <- emojifont::emoji("bomb")
-    print(grid)
-    print("Game over!")
-  } else if (grid[r, c] != "" || r <= 0 || c <= 0 ||
-             r > nrow(grid) || c > ncol(grid)) {
-    return(grid[r, c])
-  } else {
-    # Count the number of mines in the immediate neighborhood
-    mines <- sum(grid[(r-1):(r+1), (c-1):(c+1)] == "M")
-    
-    if (mines > 0) {
-      # If there are adjacent mines, reveal the count and return the grid
-      grid[r, c] <- mines
-      return(grid)
-    } else {
-      # If there are no adjacent mines, reveal the cell and recursively reveal
-      # all adjacent cells that are not mines
-      grid[r, c] <- "*"
-      for (i in -1:1) {
-        for (j in -1:1) {
-          grid <- reveler_case(grid, r+i, c+j)
-        }
-      }
-      return(grid)
-    }
-  }
-}
-
-
-
-
-
 
 
 z <- generate_grid(10, 12, 16)
-
