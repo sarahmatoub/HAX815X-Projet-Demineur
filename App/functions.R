@@ -120,5 +120,15 @@ reveler_case <- function(grid, r, c) {
   return(grid)
 }
 
+update <- function(grid){
+  for(r in 1:nrow(grid)){
+    for(c in 1:ncol(grid)){
+      if(reveler_case(grid, r, c)==TRUE && grid[r,c]!=M){
+        grid <- grid[r,c]
+        #finish
+      }
+    }
+  }
+}
 
 z <- generate_grid(10, 11, 16)
