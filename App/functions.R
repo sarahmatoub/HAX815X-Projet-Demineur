@@ -75,11 +75,6 @@ mines_count <- function(grid){
 }
 
 
-
-
-# Fonction pour révéler la case sélectionnée
-
-
 #gérer le clic groit
 clic_droit <- function(event){
   if(event$type == "click" && event$button == "right"){
@@ -101,21 +96,15 @@ flag <- function(grid){
   }
 }
 
-
-
-  
-  
-  
-  
-
+# Fonction pour révéler la case sélectionnée
 reveler_case <- function(grid, r, c) {
   if (grid[r, c] == "M") {
-    # If the cell contains a mine, reveal all mines and print "Game over!"
+    # Si toutes les cellules contiennent une mine alors afficher game over
     grid[grid == "M"] <- emojifont::emoji("bomb")
     print(grid)
     print("Game over!")
   } else if (grid[r, c] == "") {
-    # If the cell is empty, reveal all adjacent cells that do not contain mines
+    # si la case est vide alors révéler les cellules adjacentes ne contenant pas de mines
     for (i in -1:1) {
       for (j in -1:1) {
         if (r+i >= 1 && r+i <= nrow(grid) && c+j >= 1 && c+j <= ncol(grid)) {
@@ -123,12 +112,13 @@ reveler_case <- function(grid, r, c) {
             grid[r+i, c+j] <- "R"
             grid <- reveler_case(grid, r+i, c+j)
           }
-        }
+        } 
       }
     }
   }
+  grid[r, c] <- "R"
   return(grid)
 }
 
 
-z <- generate_grid(10, 12, 16)
+z <- generate_grid(10, 11, 16)
