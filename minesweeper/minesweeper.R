@@ -96,7 +96,7 @@ get.dpi = function(){
 }
 
 
-#prepare the curIrcle pattern for the bomb icon
+#tracer l'icône de la bombe
 circleX = cos( seq(1,50)/50 *2*3.1415935  );
 circleY = sin( seq(1,50)/50 *2*3.1415935 );
 
@@ -211,12 +211,9 @@ plotbutton <- function (x,y,w1,w2,r,str, cex) {
 
 plot.field <-function(nx,ny, yExtra, w){
   
-  par(  oma=c(0,0,0,0) )      #the margin between the device oboarard and figure brder
+  par(  oma=c(0,0,0,0) )      #the margin between the device oboarard and figure border
   par(  mar=c(.0,.0,.0,.0) )  #the margin between the figure boarder and plot border 	
-  #plot( c(0,nx*w),c(-yExtra,(ny+0)*w),type='n',ann=FALSE , axes=FALSE )
-  
-  #legend(0, -1,instructStr ,cex=1.2 ,text.col="blue", box.col="red", bg="yellow")   
-  #text(0,   -4,            instructStr,font=1,adj=c(0,0),cex=1.1)    
+   
   
   # the outter box
   r =.8
@@ -250,11 +247,9 @@ plot.field <-function(nx,ny, yExtra, w){
   polygon( c(x0, x0,   x1,  x1 ),   c(y1 ,y0,   y0, y1 ),   col='#cdffb4d9',border='#284e02f3' ) 
   
 }
-
+#compteur du nombre de bombes
 plot.count <- function(nx,ny, yExtra, w, count) {
   count = ifelse(count>999,999,count);
-  #bnum=paste('No. of bombs left: ', formatC(sum(img)-sum(right),format='d',digits=3),' '  ) ;
-  #bnum= paste('Bombs left:', formatC(count,format='d',digits=3),sep=''  ) ;
   bnum=sprintf("Bombes restantes: %2d ",count)
   
   # The counter and the surrouding box
@@ -272,7 +267,7 @@ plot.count <- function(nx,ny, yExtra, w, count) {
   
   polygon( c(x0, x0,   x1,  x1 ),   c(y1 ,y0,   y0, y1 ),         col='#c6f1b1d9',border='#256902d9' )  	
   text(   0, -0.5-(yExtra-0.5)/2, bnum, font=1, adj=c(0,0.5),cex=cex)   
-  #legend(.5, -3.5,bnum,xjust=0, yjust=0.5, cex=1.2,text.col="blue", box.col="red",bg="yellow")   
+  
 }
 
 plot.buttons <-function(nx,ny, yExtra, w) {	
@@ -288,7 +283,7 @@ plot.buttons <-function(nx,ny, yExtra, w) {
   plotbutton(nx-w1-r-w1, -0.5-(yExtra-0.5)/2+w2/2, w1, w2,r,'Rejouer',cex1) 
 }
 
-minesweeper <- function(height=15, width=12, prob=0.1) {
+demineur <- function(height=15, width=12, prob=0.1) {
   
   if (! base::interactive()) {
     cat("minesweeper() runs only in the interactive command mode.")
@@ -309,7 +304,7 @@ minesweeper <- function(height=15, width=12, prob=0.1) {
   w   =   1;
   dpi <- get.dpi() 
   
-  #use dpi to creat a window with a width of about 600 pixels  
+  #use dpi to create a window with a width of about 600 pixels  
   gridsize = 25
   yExtra   = 3;  
   numCex   = 1.0
@@ -657,3 +652,4 @@ minesweeper <- function(height=15, width=12, prob=0.1) {
   getGraphicsEvent(instructStr, onMouseDown = mousedown, onMouseUp = mouseup);  
   invisible(NA)
 }
+
