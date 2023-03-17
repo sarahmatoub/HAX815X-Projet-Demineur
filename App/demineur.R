@@ -32,7 +32,7 @@ generate_grid <- function(rows, cols, mines) {
   for (r in 1:rows) {
     for (c in 1:cols) {
       if (grid[r, c] == -1) {
-        grid[r, c] <- tags$image(src=bomb_url, width="0.5cm", height="0.5cm")
+        grid[r, c] <- "M"
         next
       }
       neighbors <- c()
@@ -70,18 +70,10 @@ generate_grid <- function(rows, cols, mines) {
   return(grid)
   
 }
+#click droit 
 
-# Fonction pour révéler la case sélectionnée
-reveal <- function(grid, row, col) {
-  if (grid[row, col] == -1) {
-    return(emoji("bomb")) # Mine
-  } else if (grid[row, col] > 0) {
-    return(grid[row, col]) # Nombre de mines voisines
-  } else {
-    return("") # Case vide
-  }
-}
 
+ 
 
 # Crée l'application Shiny
 ui <- fluidPage(
