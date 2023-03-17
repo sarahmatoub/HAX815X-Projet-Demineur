@@ -5,14 +5,14 @@ library(emojifont)
 library(grid)
 
 
-
 #Initialisation
 rows = 6
 cols = 8
 mines = 10
 
 #Remplacer les cases avec des -1 avec des emojis bombes
-bomb_url <- "https://em-content.zobj.net/thumbs/240/whatsapp/326/bomb_1f4a3.png"
+#bomb_url <- "https://em-content.zobj.net/thumbs/240/whatsapp/326/bomb_1f4a3.png"
+#bomb_path <- "~/HAX815X-Projet-Demineur/image/bomb.png"
 
 replace <- function(x){
   color <- c("#99ff33", "#b3ff66", "#b3d9ff", "#cc99ff", "#ff99cc")
@@ -32,7 +32,8 @@ generate_grid <- function(rows, cols, mines) {
   for (r in 1:rows) {
     for (c in 1:cols) {
       if (grid[r, c] == -1) {
-        grid[r, c] <- tags$image(src=bomb_url, width="0.5cm", height="0.5cm")
+        grid[r, c]  <- "M"
+        #tags$image(src=bomb_url, width="0.1cm", height="0.1cm")
         next
       }
       neighbors <- c()
@@ -72,15 +73,40 @@ generate_grid <- function(rows, cols, mines) {
 }
 
 # Fonction pour révéler la case sélectionnée
-reveal <- function(grid, row, col) {
-  if (grid[row, col] == -1) {
-    return(emoji("bomb")) # Mine
-  } else if (grid[row, col] > 0) {
-    return(grid[row, col]) # Nombre de mines voisines
-  } else {
-    return("") # Case vide
+
+reveler_case <- function(grid , r, c){
+  if(grid[r,c]=="M"){
+    grid[grid[r,c]=="M"] <- "*"
+    print("Game over!")
+  } else if(grid[r,c]==""){
+    grid[r,c] <- "-"
+    for(i in -1:1){
+      for(j in -1:1){
+        if (r+i > 0 && r+i <= nrow(grid) && c+j > 0 && c+j <= ncol(grid)) {
+          if (grid[r+i, c+j] == " ") {
+            reveal_cell(grid, r+i, c+j)
+          } else {
+            grid[r+i, c+j] <- "-"
+          }
+        }
+      }
+    }
   }
 }
+
+# fonction pour gérer le click droit
+
+
+
+
+
+#fonction pour gérer le click gauche
+
+
+
+
+
+# fonction pour mettre à jour la grille
 
 
 # Crée l'application Shiny
