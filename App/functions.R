@@ -75,16 +75,16 @@ mines_count <- function(grid){
 }
 
 
-<<<<<<< HEAD
+
 
 
 # Fonction pour révéler la case sélectionnée
 reveler_case <- function(grid, r, c) {
   if (grid[r, c] == "M") {
     # Si toutes les cellules contiennent une mine alors afficher game over
-    grid[grid == "M"] <- emojifont::emoji("bomb")
-    print(grid)
+    grid[grid =="M"] <- emojifont::emoji("bomb")
     print("Game over!")
+    return(grid)
   } else if (grid[r, c] == "") {
     # si la case est vide alors révéler les cellules adjacentes ne contenant pas de mines
     for (i in -1:1) {
@@ -108,8 +108,7 @@ reveler_case <- function(grid, r, c) {
 }
 
 
-=======
->>>>>>> 8544384c07f17850ad4a6014d889421e4756b269
+
 #gérer le clic groit
 clic_droit <- function(event){
   if(event$type == "click" && event$button == "right"){
@@ -131,13 +130,35 @@ flag <- function(grid){
   }
 }
 
-<<<<<<< HEAD
+# fonction qui met à jour la grille
+update <- function(grid, r, c) {
+  if (grid[r, c] == "M") {
+    # Si la case contient une mine, afficher game over et retourner la grille non mise à jour
+    grid[grid == "M"] <- emojifont::emoji("bomb")
+    print(grid)
+    print("Game over!")
+    return(grid)
+  } else if (grid[r, c] == "") {
+    # Si la case est vide, révéler les cellules adjacentes qui ne contiennent pas de mines
+    for (i in -1:1) {
+      for (j in -1:1) {
+        if (r+i >= 1 && r+i <= nrow(grid) && c+j >= 1 && c+j <= ncol(grid)) {
+          if (grid[r+i, c+j] != "M" && grid[r+i, c+j] != "R") {
+            grid[r+i, c+j] <- "R"
+            update(grid, r+i, c+j)
+          }
+        }
+      }
+    }
+  } else if (!is.na(as.numeric(grid[r, c]))) {
+    # Si la case contient un chiffre, révéler la case et retourner la grille mise à jour
+    grid[r, c] <- "R"
+  }
+  return(grid)
+}
 
 
-  
-  
-  
-=======
+
 # Fonction pour révéler la case sélectionnée
 reveler_case <- function(grid, r, c) {
   if (grid[r, c] == "M") {
@@ -161,17 +182,14 @@ reveler_case <- function(grid, r, c) {
   grid[r, c] <- "R"
   return(grid)
 }
->>>>>>> 8544384c07f17850ad4a6014d889421e4756b269
 
-update <- function(grid){
-  for(r in 1:nrow(grid)){
-    for(c in 1:ncol(grid)){
-      if(reveler_case(grid, r, c)==TRUE && grid[r,c]!=M){
-        grid <- grid[r,c]
-        #finish
-      }
-    }
-  }
+jeu <- function(r, c, mines){
+  grille <- generate_grid(r, c, mines)
+  grille_cachee <- matrix(emojifont::emoji("flower"), nrow = r, ncol = c)
+  play(grille_cachee, grille)
+  
 }
+
+
 
 z <- generate_grid(10, 11, 16)
