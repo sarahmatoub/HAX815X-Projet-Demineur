@@ -102,29 +102,31 @@ flag <- function(grid){
 }
 
 
-reveler_case <- function(grid , r, c){
-  if(grid[r,c] == "M"){
-    # Si la case contient une mine, révéler toutes les mines et afficher "Game over!"
-    grid[grid=="M"] <- emojifont::emoji("bomb")
+
+  
+  
+  
+  
+
+reveler_case <- function(grid, r, c) {
+  if (grid[r, c] == "M") {
+    # If the cell contains a mine, reveal all mines and print "Game over!"
+    grid[grid == "M"] <- emojifont::emoji("bomb")
     print(grid)
     print("Game over!")
-  } else if (grid[r,c] == "") {
-    # Si la case est vide, révéler toutes les cases adjacentes qui ne contiennent pas de mines
+  } else if (grid[r, c] == "") {
+    # If the cell is empty, reveal all adjacent cells that do not contain mines
     for (i in -1:1) {
       for (j in -1:1) {
-        if (r+i >= 1 && r+i <= nrow(grid) || c+j >= 1 && c+j <= ncol(grid)) {
-          if (grid[r+i, c+j] != "M") {
+        if (r+i >= 1 && r+i <= nrow(grid) && c+j >= 1 && c+j <= ncol(grid)) {
+          if (grid[r+i, c+j] != "M" && grid[r+i, c+j] != "R") {
             grid[r+i, c+j] <- "R"
             grid <- reveler_case(grid, r+i, c+j)
-          } else if(grid[r,c]!="M" || grid[r,c]!="") {
-            grid[r,c] <- "R"
-            return(grid)
+          }
         }
-      } 
-     }
+      }
     }
-  } 
-  
+  }
   return(grid)
 }
 
