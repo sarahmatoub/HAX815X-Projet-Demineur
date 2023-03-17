@@ -32,8 +32,12 @@ generate_grid <- function(rows, cols, mines) {
   for (r in 1:rows) {
     for (c in 1:cols) {
       if (grid[r, c] == -1) {
+
         grid[r, c]  <- "M"
         #tags$image(src=bomb_url, width="0.1cm", height="0.1cm")
+
+        grid[r, c] <- "M"
+
         next
       }
       neighbors <- c()
@@ -72,42 +76,31 @@ generate_grid <- function(rows, cols, mines) {
   
 }
 
-# Fonction pour révéler la case sélectionnée
 
-reveler_case <- function(grid , r, c){
-  if(grid[r,c]=="M"){
-    grid[grid[r,c]=="M"] <- "*"
+
+# Fonction pour révéler la case sélectionnée
+reveler_case <- function(grid, r, c) {
+  if (grid[r, c] == "M") {
+    # Si toutes les cellules contiennent une mine alors afficher game over
+    grid[grid == "M"] <- emojifont::emoji("bomb")
+    print(grid)
     print("Game over!")
-  } else if(grid[r,c]==""){
-    grid[r,c] <- "-"
-    for(i in -1:1){
-      for(j in -1:1){
-        if (r+i > 0 && r+i <= nrow(grid) && c+j > 0 && c+j <= ncol(grid)) {
-          if (grid[r+i, c+j] == " ") {
-            reveal_cell(grid, r+i, c+j)
-          } else {
-            grid[r+i, c+j] <- "-"
+  } else if (grid[r, c] == "") {
+    # si la case est vide alors révéler les cellules adjacentes ne contenant pas de mines
+    for (i in -1:1) {
+      for (j in -1:1) {
+        if (r+i >= 1 && r+i <= nrow(grid) && c+j >= 1 && c+j <= ncol(grid)) {
+          if (grid[r+i, c+j] != "M" && grid[r+i, c+j] != "R") {
+            grid[r+i, c+j] <- "R"
+            grid <- reveler_case(grid, r+i, c+j)
           }
-        }
+        } 
       }
     }
   }
+  grid[r, c] <- "R"
+  return(grid)
 }
-
-# fonction pour gérer le click droit
-
-
-
-
-
-#fonction pour gérer le click gauche
-
-
-
-
-
-# fonction pour mettre à jour la grille
-
 
 # Crée l'application Shiny
 ui <- fluidPage(
