@@ -130,6 +130,12 @@ flag <- function(grid){
   }
 }
 
+#fonction pour mettre un drapeau et le retirer
+flag_cell <- function(f,grid){
+  grid[f] <- emojifont::emoji("triangular_flag_on_post")
+  flag <- matrix()
+}
+
 # fonction qui met à jour la grille
 update <- function(grid, r, c) {
   if (grid[r, c] == "M") {
@@ -183,6 +189,76 @@ reveler_case <- function(grid, r, c) {
   return(grid)
 }
 
+
+grid_cachee <- function(grid, r, c){
+  for(r in 1:nrow(grid)){
+    for(c in 1:ncol(grid)){
+      grid[r,c] <- emojifont::emoji("flower_playing_cards")
+    }
+  }
+ return(grid) 
+}
+
+
+
+reveler_case <- function(grid, r, c) {
+  
+  if (grid[r, c] == "M") {
+    print("Game Over")
+    return(grid)
+  }
+  
+  if (grid[r, c] != emojifont::emoji("triangular_flag_on_post")) {
+    
+    if (grid[r, c] == 0) {
+      
+      grid[r, c] <- ""
+      
+      rows <- nrow(grid)
+      cols <- ncol(grid)
+      
+      # get all adjacent cells
+      r_start <- max(r -c1, 1)
+      r_end <- min(r +c1, rows)
+      c_start <- max(y - 1, 1)
+      c_end <- min(y + 1, cols)
+      
+      for (r in r_start:r_end) {
+        for (c in c_start:c_end) {
+          
+          # if adjacent cell is not a mine or already revealed
+          if (grid[r, c] != "M" && grid[r, c] == emojifont::emoji("flower")) {
+            
+            grid[r, c] <- as.character(grid[r, c])
+            
+            # if adjacent cell is empty, reveal all adjacent cells recursively
+            if (grid[r, c] == 0) {
+              grid <- reveler_case(grid, grid, r, c)
+            }
+          }
+        }
+      }
+      
+    } else {
+      grid[r, c] <- as.character(grid[r, c])
+    }
+  }
+  
+  # Check if all non-mine cells have been revealed
+  if (all(grid[grid != "M"] != 0 & grid[grid != emojifont::emoji("flower")] != emojifont::emoji("triangular_flag_on_post"))) {
+    print("Congrats you won!")
+  }
+  
+  return(grid)
+}
+
+
+
+
+
+
+
+
 jeu <- function(r, c, mines){
   grille <- generate_grid(r, c, mines)
   grille_cachee <- matrix(emojifont::emoji("flower"), nrow = r, ncol = c)
@@ -193,3 +269,4 @@ jeu <- function(r, c, mines){
 
 
 z <- generate_grid(10, 11, 16)
+y <- grid_cachee(z)
