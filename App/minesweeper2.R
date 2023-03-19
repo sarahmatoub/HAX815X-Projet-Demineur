@@ -13,6 +13,8 @@ board_dims <- list(
 #   "Hard" = 99
 # )
 
+#interface shiny  
+
 ui <- fluidPage(
   titlePanel("Minesweeper"),
   sidebarLayout(
