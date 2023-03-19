@@ -1,78 +1,19 @@
 library(shiny)
 library(gridExtra)
 library(shinyjs)
+library(shinyWidgets)
 library(emojifont)
 library(grid)
-
-
-#Application Shiny 
 
 #Initialisation
 rows = 6
 cols = 8
 mines = 10
 
-#Fonction pour la couleur de la grille 
 
-replace <- function(x){
-  color <- c("#99ff33", "#b3ff66", "#b3d9ff", "#cc99ff", "#ff99cc")
-  if(x==-1){
-    return(emoji("bomb"))
-  } else{
-    return(text("x", col=color))
-  }
-}
-
-# Générer une grille de démineur
-generate_grid <- function(rows, cols, mines) {
-  grid <- matrix(0, nrow = rows, ncol = cols) 
-  mine_spots <- sample(1:(rows*cols), mines)
-  grid[mine_spots] <- -1
-  
-  for (r in 1:rows) {
-    for (c in 1:cols) {
-      if (grid[r, c] == -1) {
-        grid[r, c]  <- "M"
-        #tags$image(src=bomb_url, width="0.1cm", height="0.1cm")
-        next
-      }
-      neighbors <- c()
-      if (r > 1) {
-        neighbors <- c(neighbors, grid[r - 1, c])
-        if (c > 1) {
-          neighbors <- c(neighbors, grid[r - 1, c - 1])
-        }
-        if (c < cols) {
-          neighbors <- c(neighbors, grid[r - 1, c + 1])
-        }
-      }
-      if (r < rows) {
-        neighbors <- c(neighbors, grid[r + 1, c])
-        if (c > 1) {
-          neighbors <- c(neighbors, grid[r + 1, c - 1])
-        }
-        if (c < cols) {
-          neighbors <- c(neighbors, grid[r + 1, c + 1])
-        }
-      }
-      if (c > 1) {
-        neighbors <- c(neighbors, grid[r, c - 1])
-      }
-      if (c < cols) {
-        neighbors <- c(neighbors, grid[r, c + 1])
-      }
-      grid[r, c] <- sum(neighbors == -1)
-      
-      if(grid[r,c]==0){
-        grid[r,c] <- ""
-      }
-    }
-  }
-  return(grid)
-  
-}
-
+# Interface utilisateur
 ui <- fluidPage(
+  
   titlePanel("Jeu du démineur"),
   sidebarLayout(
     sidebarPanel(
@@ -80,19 +21,48 @@ ui <- fluidPage(
       selectInput("Niveau", "Choisir un niveau",
                   choices = c("Facile", "Moyen", "Difficile"),
                   selected = "Facile"),
-      actionButton("Valider", icon("fas fa-magic"), label="Valider")
-    ),
+      submitButton("Reveal"),
+      br(),
+      
+      fluidRow(
+        column(width = 4, 
+               actionButton("Valider", icon("check-circle", style = "color: green;"), label="Valider")),
+        br(),
+        
+       
+        
+        
+        fluidRow(
+          column(width = 12, align = "center",
+                 actionBttn(
+                   inputId = "flag_count",
+                   label = emoji("triangular_flag_on_post"),
+                   style = "unite",
+                   color = "primary",
+                   size = "lg",
+                   value = "flag_count"
+                 ))
+        ),
+        fluidRow(
+          column(width=12, align="center",
+                 actionButton(
+                   inputId = "replay",
+                   icon("refresh", style = "color: blue;") ,
+                   label="Rejouer")
+                 
+                 
+          )))),
     mainPanel(
-       plotOutput("grid")
+      plotOutput("grid")
     )
-  )
-)
+  ))
+
 
 server <- shinyServer(function(input, output) {
-    
-    ma_gr <- eventReactive(input$Valider, {
+  source("functions.R")
+  
+  ma_gr <- eventReactive(input$Valider) {
     niveau <- input$Niveau
-     
     
     grid <- matrix(0, nrow = rows, ncol = cols)
     mine_spots <- sample(1:(rows * cols), mines)
@@ -133,20 +103,40 @@ server <- shinyServer(function(input, output) {
     }
     grid
   
-    
+  }
+  # Define a reactiveVal to store the flag count
+  flag_count <- reactiveVal(0)
+  #observeEvent(input$rightclick, {
+    if (input$rightclick$value == "flag") {
+      # update flag count
+     flag_count <- input$flag_count + 1
+     #updateActionButton(session, "flag-count", label = paste0(emoji("triangular_flag_on_post"), flag_count))
+    } else if (input$rightclick$value == "unflag") {
+       #update flag count
+      flag_count <- input$flag_count - 1
+      #updateActionButton(session, "flag-count", label = paste0(emoji("triangular_flag_on_post"), flag_count))
+    }
   })
-    })
+  
+  
+ 
+  
+  # Display the flag count using renderText
+  output$flag_count <- renderText({
+    paste0(emoji("triangular_flag_on_post"), flag_count())
+  })
+  
   
   #Affichage de la grille
-    output$grid <- renderPlot({
+  output$grid <- renderPlot({
     grid <- ma_gr()
-   
+    
     #couleurs des grilles
     theme1 <- ttheme_default(
       core = list(
         bg_params = list(fill = c("#fff2e6", "#ffe6cc"), col = "#ffcc99"), 
         fg_params = list(col = "blue")),
-        base_size = 16)
+      base_size = 16)
     
     if (input$Niveau == "Facile") {
       matrix_output = generate_grid(6, 8, 10)
@@ -162,15 +152,15 @@ server <- shinyServer(function(input, output) {
       matrix_output = generate_grid(18, 21, 60)
       grid.table(matrix_output, theme = theme1)
     }
-   
     
-    #grid.table(matrix_output, theme = ttheme_default(base_size = 10))
   })
-    
-    
-    
+ 
+   
 
+#tester fonction reveler_case 
 
 
 
 shinyApp(ui = ui, server = server)
+         
+         
