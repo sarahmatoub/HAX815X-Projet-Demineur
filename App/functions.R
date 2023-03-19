@@ -75,9 +75,6 @@ mines_count <- function(grid){
 }
 
 
-<<<<<<< HEAD
-
-
 # Fonction pour révéler la case sélectionnée
 reveler_case <- function(grid, r, c) {
   if (grid[r, c] == "M") {
@@ -108,8 +105,6 @@ reveler_case <- function(grid, r, c) {
 }
 
 
-=======
->>>>>>> 8544384c07f17850ad4a6014d889421e4756b269
 #gérer le clic groit
 clic_droit <- function(event){
   if(event$type == "click" && event$button == "right"){
@@ -131,13 +126,13 @@ flag <- function(grid){
   }
 }
 
-<<<<<<< HEAD
 
 
+
   
   
   
-=======
+
 # Fonction pour révéler la case sélectionnée
 reveler_case <- function(grid, r, c) {
   if (grid[r, c] == "M") {
@@ -161,7 +156,7 @@ reveler_case <- function(grid, r, c) {
   grid[r, c] <- "R"
   return(grid)
 }
->>>>>>> 8544384c07f17850ad4a6014d889421e4756b269
+
 
 update <- function(grid){
   for(r in 1:nrow(grid)){
