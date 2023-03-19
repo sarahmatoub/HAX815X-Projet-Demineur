@@ -117,18 +117,6 @@ server <- shinyServer(function(input, output) {
     
     })
     
-  # observeEvent(input$rightclick, {
-  #   if (input$rightclick$value == "flag") {
-  #     # update flag count
-  #     flag_count <- input$flag_count + 1
-  #     updateActionButton(session, "flag-count", label = paste0(emoji("triangular_flag_on_post"), flag_count))
-  #   } else if (input$rightclick$value == "unflag") {
-  #     # update flag count
-  #     flag_count <- input$flag_count - 1
-  #     updateActionButton(session, "flag-count", label = paste0(emoji("triangular_flag_on_post"), flag_count))
-  #   }
-  # })
-  # 
   
   #Affichage de la grille
     output$grid <- renderPlot({
@@ -171,22 +159,40 @@ server <- shinyServer(function(input, output) {
   })
     
    
-   
+   # case à révéler
    observeEvent(input$reveal, {
-     row <- input$row
-     col <- input$col
+     cell <- input$cell
      grid <- input$matrix_output
      hidden_grid <- input$matrix_hide
      
      revealed_grid <- reveler_case(grid, row, col, hidden_grid)
      update_input(session, hidden_grid, value = revealed_grid)
    })
+   
+   
+   # mettre un drapeau
+   observeEvent(input$flag, {
+     row <- input$row
+     col <- input$col
+     
+     grid <- input$matrix_output
+     hidden_grid <- input$matrix_hide
+     
+     revealed_grid <- flag_cell(grid, input$cell, hidden_grid)
+     update_input(session, hidden_grid, value = revealed_grid)
+   })
+   
+    #Rejouer
+   observeEvent(input$replay, {observeEvent(input$flag, {
+     cell <- as.numeric(input$cell)
+     z <- flag_cell(cell, z)
+     output$game <- renderDT(z, escape = FALSE)
+   })
+     
+     
+   })
     
     
-    
-    # output$bombsleft <- renderText({
-    #   paste0("Bombs left", mines_count(grid=matrix_output))
-    # })
     
     
 })

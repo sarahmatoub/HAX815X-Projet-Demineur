@@ -88,11 +88,25 @@ flag <- function(grid){
   }
 }
 
-#fonction pour mettre un drapeau et le retirer
-flag_cell <- function(f,grid){
-  grid[f] <- emojifont::emoji("triangular_flag_on_post")
-  flag <- matrix()
+flag_cell <- function(cell, grid){
+  r <- nrow(grid)
+  c <- ncol(grid)
+  fl <- matrix(data = paste0(emoji("triangular_flag_on_post"),1:(r*c)), nrow = r, ncol = c)
+  gg <- matrix(data = paste0(emoji("sunflower"),1:(r*c)), nrow = r, ncol = c)
+  
+  row <- ceiling(cell/c)
+  col <- cell - (row-1)*c
+  
+  if (grid[row, col]==fl[row, col]){
+    grid[row, col] <- gg[row, col]
+    return(grid)
+  } else{
+    grid[row, col] <- fl[row, col]
+    return(grid)
+  }
 }
+
+
 
 #grille cachée 
 grid_cachee <- function(grid, r, c){
@@ -102,33 +116,6 @@ grid_cachee <- function(grid, r, c){
   grid[] <- seq_along(grid)
     
  return(grid) 
-}
-
-# fonction qui met à jour la grille
-update <- function(grid, r, c) {
-  if (grid[r, c] == "M") {
-    # Si la case contient une mine, afficher game over et retourner la grille non mise à jour
-    grid[grid == "M"] <- emojifont::emoji("bomb")
-    print(grid)
-    print("Game over!")
-    return(grid)
-  } else if (grid[r, c] == "") {
-    # Si la case est vide, révéler les cellules adjacentes qui ne contiennent pas de mines
-    for (i in -1:1) {
-      for (j in -1:1) {
-        if (r+i >= 1 && r+i <= nrow(grid) && c+j >= 1 && c+j <= ncol(grid)) {
-          if (grid[r+i, c+j] != "M" && grid[r+i, c+j] != "R") {
-            grid[r+i, c+j] <- "R"
-            update(grid, r+i, c+j)
-          }
-        }
-      }
-    }
-  } else if (!is.na(as.numeric(grid[r, c]))) {
-    # Si la case contient un chiffre, révéler la case et retourner la grille mise à jour
-    grid[r, c] <- "R"
-  }
-  return(grid)
 }
 
 
@@ -268,17 +255,5 @@ reveal_adjacent <- function(grid, r, c, grille_cachee, max_revealed) {
   
   return(grille_cachee)
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
