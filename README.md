@@ -20,10 +20,30 @@ et en-dessous à droite d’elle).
 
 ## Projet
 
-- Le fichier "minesweeper2.R" permet de jouer au démineur à plusieurs niveaux (Facile, Moyen , Difficile) , ou en personnalisant votre grille selon le choix des lignes , colonnes et mines en utilisant la fonction `minesweeper` de la librairie "Rbeast".
+### Dans R :
 
-- Le fichier "minesweeper1.R" permet de jouer au démineur en personnalisant la grille de votre jeu en utilisant la fonction `minesweeper(height, width, prob)`.
+- Dans le répertoire minesweeper/minesweeper.R, vous trouverez le code pour le jeu du démineur, qui correspond à la fonction implémentée dans la bibliothèque Rbeast (disponible dans la section *Références*). Si vous exécutez ce code et que vous saisissez la commande suivante dans la console de R:
 
+```bash
+demineur(width= 15, height=10, prob=0.5)
+```
+Une fenêtre va s'afficher et vous permettra de jouer au démineur sur `R`.
+
+
+- Le fichier "minesweeper2.R" permet de jouer au démineur en personnalisant la grille de votre jeu en utilisant la fonction `minesweeper(height, width, prob)` de la librairie `Rbeast`.
+
+## Dans Shiny:
+
+- Avant de lancer l'application , assurez vous d'avoir installé toutes librairies nécessaires , grâce à la commande suivante :
+
+```bash
+while IFS=" " read -r package version; 
+do 
+  Rscript -e "devtools::install_version('"$package"', version='"$version"')"; 
+done < "requirements.txt"
+```
+
+Ensuite , vous pouvez la lancer dans le fichier `demineur.R`.
 
 ## Contact :
 
@@ -34,4 +54,6 @@ thizir.abchiche@etu.umontpellier.fr
 ## Références :
 
 - [Mastering Shiny by O'Reilly](https://mastering-shiny.org/).
+
+- [Code source de la fonction minesweeper](https://rdrr.io/cran/Rbeast/src/R/minesweeper.r).
 
