@@ -150,9 +150,7 @@ server <- shinyServer(function(input, output) {
     
     if (input$Niveau == "Difficile") {
       matrix_output = generate_grid(18, 21, 60)
-      grid.table(matrix_output, theme = theme1)
-    }
-    
+      grid.table(s
   })
  
    
