@@ -20,14 +20,14 @@ et en-dessous à droite d’elle).
 
 ## Projet
 
-### Dans R :
+### Dans R  :
 
-- Dans le répertoire minesweeper/minesweeper.R, vous trouverez le code pour le jeu du démineur, qui correspond à la fonction implémentée dans la bibliothèque Rbeast (disponible dans la section *Références*). Si vous exécutez ce code et que vous saisissez la commande suivante dans la console de R:
+- Dans le répertoire minesweeper/minesweeper.R, vous trouverez le code pour le jeu du démineur, qui correspond à la fonction implémentée dans la bibliothèque Rbeast (disponible dans la section *Références*). Si vous exécutez ce code et que vous saisissez la commande suivante dans la console de R studio:
 
 ```bash
 demineur(width= 15, height=10, prob=0.5)
 ```
-Une fenêtre va s'afficher et vous permettra de jouer au démineur sur `R`.
+Une fenêtre va s'afficher et vous permettra de jouer au démineur sur R studio 
 
 
 - Le fichier "minesweeper2.R" permet de jouer au démineur en personnalisant la grille de votre jeu en utilisant la fonction `minesweeper(height, width, prob)` de la librairie `Rbeast`.
