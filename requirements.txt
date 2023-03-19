@@ -1,0 +1,7 @@
+shiny 1.7.4
+shinyjs 2.1.0
+gridExtra 2.3
+grid 4.2.2
+emojifont 0.5.5
+bslib 0.4.2
+shinyWidgets 0.7.6
