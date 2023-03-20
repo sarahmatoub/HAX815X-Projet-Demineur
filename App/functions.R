@@ -81,7 +81,7 @@ flag <- function(grid){
   for(r in 1:nrow(grid)){
     for(c in 1:ncol(grid)){
       if(clic_droit(grid[r,c])==TRUE){
-         grid[r,c] <- emojifont::emoji("flag")
+         grid[r,c] <- "-2"
          print(mines_count(grid) - 1)
       }
     }
@@ -91,8 +91,8 @@ flag <- function(grid){
 flag_cell <- function(cell, grid){
   r <- nrow(grid)
   c <- ncol(grid)
-  fl <- matrix(data = paste0(emoji("triangular_flag_on_post"),1:(r*c)), nrow = r, ncol = c)
-  gg <- matrix(data = paste0(emoji("sunflower"),1:(r*c)), nrow = r, ncol = c)
+  fl <- matrix(data = paste0("-2",1:(r*c)), nrow = r, ncol = c)
+  gg <- matrix(data = paste0(emoji("hibiscus"),1:(r*c)), nrow = r, ncol = c)
   
   row <- ceiling(cell/c)
   col <- cell - (row-1)*c
@@ -118,12 +118,18 @@ grid_cachee <- function(grid, r, c){
  return(grid) 
 }
 
-
+cell_id <- function(grid, r, c){
+  n_row <- nrow(grid)
+  n_col <- ncol(grid)
+  #calculer l'id de la cellule
+  cell_id <-  (r - 1) * n_col + c
+  return(cell_id)
+}
 
 #mettre à jour la grille 
 maj_grille_case <- function(grid, r, c, grille_cachee) {
   if (grid[r, c] == "M") {
-    grille_cachee[grid == "M"] <- emojifont::emoji("bomb")
+    grille_cachee[grid == "M"] <- "-1"
   } else if (grid[r, c] == "") {
     grille_cachee[r, c] <- grid[r, c]
     for (i in -1:1) {
@@ -140,53 +146,14 @@ maj_grille_case <- function(grid, r, c, grille_cachee) {
   }
   return(grille_cachee)
 }
-
-
-
-######################################################
-#test des fonctions ci-dessus avant de les mettre dans shiny et tout faire sauter
-
-play_minesweeper <- function(grid) {
-  grille_cachee <- grid_cachee(grid)
-  gameOver <- FALSE
-  while (!gameOver) {
-    print(grille_cachee)
-    r <- as.integer(readline(prompt="Enter row: "))
-    c <- as.integer(readline(prompt="Enter column: "))
-    # if (grille_cachee[r, c] != " ") {
-    #   print("This cell has already been revealed. Please choose another one.")
-    # } else {
-    grille_cachee <- reveler_case(grid, r, c, grille_cachee )
-    #grille_cachee <- reveler_case(as.matrix(grid), r, c, grille_cachee)
-    maj_grille_case(grid, r, c, grille_cachee)
-      if (any(grille_cachee == "M")) {
-         gameOver <- TRUE
-        print("Game over!") }
-      
-  }
-  
-  replay <- readline(prompt = "Do you want to replay? (y/n) ")
-  if(replay=="y"){
-    play_minesweeper(grid)
-  } else {
-    quit(save="default")
-  }
-  }
-#}
-
-
-z <- generate_grid(4, 4, 10)
-y <- grid_cachee(z)
-
-
-
+# fonction pour révéler la case
 reveler_case <- function(grid, r, c, grille_cachee) {
   
   grille_cachee <- grid_cachee(grid)
   
   if (grid[r, c] == "M") {
     # Si toutes les cellules contiennent une mine alors afficher game over
-    grille_cachee[grid=="M"] <- emojifont::emoji("bomb")
+    grille_cachee[grid=="M"] <- "-1"
     print("Game over!")
     
   } else if(grid[r, c] == "") {
@@ -255,5 +222,43 @@ reveal_adjacent <- function(grid, r, c, grille_cachee, max_revealed) {
   
   return(grille_cachee)
 }
+
+
+
+######################################################
+#test des fonctions ci-dessus avant de les mettre dans shiny et tout faire sauter
+
+play_minesweeper <- function(grid) {
+  grille_cachee <- grid_cachee(grid)
+  gameOver <- FALSE
+  while (!gameOver) {
+    print(grille_cachee)
+    r <- as.integer(readline(prompt="Enter row: "))
+    c <- as.integer(readline(prompt="Enter column: "))
+    # if (grille_cachee[r, c] != " ") {
+    #   print("This cell has already been revealed. Please choose another one.")
+    # } else {
+    grille_cachee <- reveler_case(grid, r, c, grille_cachee )
+    #grille_cachee <- reveler_case(as.matrix(grid), r, c, grille_cachee)
+    maj_grille_case(grid, r, c, grille_cachee)
+      if (any(grille_cachee == "M")) {
+         gameOver <- TRUE
+        print("Game over!") }
+      
+  }
+  
+  replay <- readline(prompt = "Do you want to replay? (y/n) ")
+  if(replay=="y"){
+    play_minesweeper(grid)
+  } else {
+    quit(save="default")
+  }
+  }
+#}
+
+
+z <- generate_grid(4, 4, 10)
+y <- grid_cachee(z)
+
 
 
