@@ -36,7 +36,7 @@ ui <- fluidPage(
       fluidRow(
         column(width = 10, height=3, 
                actionButton("Valider", icon("check-circle", style = "color: #194d00;"), label="Valider")),
-<<<<<<< HEAD
+
       hr(),
       numericInput('cell', "Choisir la case à révéler :",
                    1, min = 1, max = 320),
@@ -63,7 +63,7 @@ ui <- fluidPage(
         icon("refresh", style = "color: #4ce600;") ,
         label="Rejouer")
     )))),
-=======
+
         hr(),
         numericInput('reveal', "Choisir la case à révéler :",
                      1, min = 1, max = 320),
@@ -90,7 +90,7 @@ ui <- fluidPage(
                    icon("refresh", style = "color: #4ce600;") ,
                    label="Rejouer")
           )))),
->>>>>>> d5123d0a6e17dd67830b33ba437607223f6790a2
+
     mainPanel(
       plotOutput("grid", width = "600px" , height="400px")
       # click = "cell_reveal",
@@ -190,7 +190,7 @@ server <- shinyServer(function(input, output, session) {
   
   cellule<-eventReactive(input$cell , {
     
-<<<<<<< HEAD
+
     # case à révéler
     my_cell <- eventReactive(input$reveal, {
       cell <- input$cell
@@ -251,9 +251,9 @@ server <- shinyServer(function(input, output, session) {
      
      
    })
-=======
+
   }
->>>>>>> d5123d0a6e17dd67830b33ba437607223f6790a2
+
     
   )
   # case à révéler
