@@ -37,7 +37,7 @@ ui <- fluidPage(
         column(width = 10, height=3, 
                actionButton("Valider", icon("check-circle", style = "color: #194d00;"), label="Valider")),
       hr(),
-      numericInput('reveal', "Choisir la case à révéler :",
+      numericInput('cell', "Choisir la case à révéler :",
                    1, min = 1, max = 320),
       fluidRow(
         column(width = 12, height=3,
@@ -46,7 +46,7 @@ ui <- fluidPage(
       ),
       
       hr(),
-      numericInput("flag", "Choisir la case où mettre un drapeau :",
+      numericInput("cell", "Choisir la case où mettre un drapeau :",
                    1, min = 1, max = 320),
       fluidRow(
         column(width = 12, height=3, 
@@ -70,7 +70,7 @@ ui <- fluidPage(
   ))
 
 
-server <- shinyServer(function(input, output) {
+server <- shinyServer(function(input, output, session) {
   source("functions.R")
   
   ma_gr <- eventReactive(input$Valider, {
@@ -158,29 +158,56 @@ server <- shinyServer(function(input, output) {
    
   })
     
+    # case à révéler
+    my_cell <- eventReactive(input$reveal, {
+      cell <- input$cell
+      grid <- ma_gr()
+      for(i in 1:nrow(grid)*ncol(grid)){
+        
+      }
+      grid[1,1] <- cell[1]
+      c <- cell[2]
+      
+     
+      reveler_case(grid, r, c, grid_cachee)
+      
+      grid
+      
+      
+    }
+      
+    )
    
    # case à révéler
-   observeEvent(input$reveal, {
-     cell <- input$cell
-     grid <- input$matrix_output
-     hidden_grid <- input$matrix_hide
-     
-     revealed_grid <- reveler_case(grid, row, col, hidden_grid)
-     update_input(session, hidden_grid, value = revealed_grid)
-   })
    
+    # observeEvent(input$cell, {
+    #   coords <- strsplit(input$cell, "_")[[1]]
+    #   r <- as.integer(coords[1])
+    #   c <- as.integer(coords[2])
+    #   
+    #   # reveal the clicked cell and adjacent cells
+    #   grille_cachee <- reveler_case(grid, r, c, grille_cachee)
+    #   
+    #   # update the rendered grid
+    #   output$grid <- renderTable({
+    #     grille_cachee
+    #   }, sanitize.text.function = function(x) x)
+    # })
+    
+    
+
    
-   # mettre un drapeau
+   #mettre un drapeau
    observeEvent(input$flag, {
-     row <- input$row
-     col <- input$col
+     matrix_output <- input$grid$matrix_output
+     matrix_hide <- input$grid$matrix_hide
+     cell <- input$cell
      
-     grid <- input$matrix_output
-     hidden_grid <- input$matrix_hide
-     
-     revealed_grid <- flag_cell(grid, input$cell, hidden_grid)
-     update_input(session, hidden_grid, value = revealed_grid)
+     revealed_grid <- flag_cell(matrix_output, cell)
+     update_input(session,
+                  list(matrix_output = matrix_output, matrix_hide = revealed_grid))
    })
+   
    
     #Rejouer
    observeEvent(input$replay, {observeEvent(input$flag, {
