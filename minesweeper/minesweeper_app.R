@@ -7,11 +7,7 @@ board_dims <- list(
   "Hard" = c(16, 30)
 )
 
-# mine_locs <- list(
-#   "Easy" = 10,
-#   "Medium" = 40,
-#   "Hard" = 99
-# )
+
 
 ui <- fluidPage(
   titlePanel("Minesweeper"),
@@ -40,7 +36,7 @@ server <- function(input, output, session) {
     board <- list(board = matrix(board_vec, nrow = dim[1], ncol = dim[2]))
     board
   })
-  
+ 
   # Create UI for game board
   output$board_ui <- renderUI({
     board <- board()
@@ -61,7 +57,7 @@ server <- function(input, output, session) {
     }
     do.call(tags$div, c(board_ui, list(class = "game-board")))
   })
-  
+
   # Handle cell clicks
   observeEvent(input$cell_clicked, {
     cell <- strsplit(input$cell_clicked, ",")[[1]]

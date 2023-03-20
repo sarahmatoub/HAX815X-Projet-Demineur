@@ -36,36 +36,9 @@ ui <- fluidPage(
       fluidRow(
         column(width = 10, height=3, 
                actionButton("Valider", icon("check-circle", style = "color: #194d00;"), label="Valider")),
-
-      hr(),
-      numericInput('cell', "Choisir la case à révéler :",
-                   1, min = 1, max = 320),
-      fluidRow(
-        column(width = 12, height=3,
-             actionButton("reveal", icon("fas fa-magic", style = "color: black"), label="Révéler")  
-          )
-      ),
-      
-      hr(),
-      numericInput("cell", "Choisir la case où mettre un drapeau :",
-                   1, min = 1, max = 320),
-      fluidRow(
-        column(width = 12, height=3, 
-               actionButton(
-                 "flag", icon("bomb"), label="Mettre/retirer un drapeau")
-              )
-      ),
-      hr(),
-      fluidRow(
-        column(width=10,height=3, 
-        actionButton(
-        inputId = "replay",
-        icon("refresh", style = "color: #4ce600;") ,
-        label="Rejouer")
-    )))),
-
+        
         hr(),
-        numericInput('reveal', "Choisir la case à révéler :",
+        numericInput("id", "Choisir la case à révéler :",
                      1, min = 1, max = 320),
         fluidRow(
           column(width = 12, height=3,
@@ -74,7 +47,7 @@ ui <- fluidPage(
         ),
         
         hr(),
-        numericInput("flag", "Choisir la case où mettre un drapeau :",
+        numericInput("cell", "Choisir la case où mettre un drapeau :",
                      1, min = 1, max = 320),
         fluidRow(
           column(width = 12, height=3, 
@@ -90,13 +63,10 @@ ui <- fluidPage(
                    icon("refresh", style = "color: #4ce600;") ,
                    label="Rejouer")
           )))),
-
+        
+        
     mainPanel(
-      plotOutput("grid", width = "600px" , height="400px")
-      # click = "cell_reveal",
-      # dbclick = "flag_cell") # l'argument click est fait pour gérer les clicks (click et double click)
-    )
-  ))
+      plotOutput("grid", width = "600px" , height="400px"))))
 
 
 server <- shinyServer(function(input, output, session) {
@@ -187,145 +157,45 @@ server <- shinyServer(function(input, output, session) {
     
   })
   
+  cellule<-eventReactive(input$reveal , {
   
-  cellule<-eventReactive(input$cell , {
-    
-
-    # case à révéler
-    my_cell <- eventReactive(input$reveal, {
-      cell <- input$cell
-      grid <- ma_gr()
-      for(i in 1:nrow(grid)*ncol(grid)){
-        
-      }
-      grid[1,1] <- cell[1]
-      c <- cell[2]
-      
+      # case à révéler
+       grid <- ma_gr()
+       r <- get_indices(grid, input$id)$row
+       c <- get_indices(grid, input$id)$col
      
-      reveler_case(grid, r, c, grid_cachee)
+      grille_cachee <- grid_cachee(grid, r, c)
+      grille <- reveler_case(grid, r, c, grille_cachee)
       
-      grid
-      
-      
-    }
-      
-    )
-   
-   # case à révéler
-   
-    # observeEvent(input$cell, {
-    #   coords <- strsplit(input$cell, "_")[[1]]
-    #   r <- as.integer(coords[1])
-    #   c <- as.integer(coords[2])
-    #   
-    #   # reveal the clicked cell and adjacent cells
-    #   grille_cachee <- reveler_case(grid, r, c, grille_cachee)
-    #   
-    #   # update the rendered grid
-    #   output$grid <- renderTable({
-    #     grille_cachee
-    #   }, sanitize.text.function = function(x) x)
-    # })
-    
-    
-
-   
-   #mettre un drapeau
-   observeEvent(input$flag, {
-     matrix_output <- input$grid$matrix_output
-     matrix_hide <- input$grid$matrix_hide
-     cell <- input$cell
-     
-     revealed_grid <- flag_cell(matrix_output, cell)
-     update_input(session,
-                  list(matrix_output = matrix_output, matrix_hide = revealed_grid))
-   })
-   
-   
-    #Rejouer
-   observeEvent(input$replay, {observeEvent(input$flag, {
-     cell <- as.numeric(input$cell)
-     z <- flag_cell(cell, z)
-     output$game <- renderDT(z, escape = FALSE)
-   })
-     
-     
-   })
-
-  }
-
-    
-  )
-  # case à révéler
-  #observeEvent(input$reveal, {
-    #cell <- input$cell
-   # grid <- input$matrix_output
-   # hidden_grid <- input$matrix_hide
-    
-   # revealed_grid <- reveler_case(grid, row, col, hidden_grid)
-    #update_input(session, hidden_grid, value = revealed_grid)
-  #})
-  
-  # case à reveler test 
-  eventReactive(input$reveal ,  {
-    cellule <- eventReactive(input$cell,{
-    
-    })
-    grid <- input$matrix_output
-    hidden_grid <- input$matrix_hide
-    
-    revealed_grid <- reveler_case(grid, row, col, hidden_grid)
-    update_input(session, hidden_grid, value = revealed_grid)
-  
-  })
-  
-  
-  # mettre un drapeau
-  #observeEvent(input$flag, {
-   # row <- input$row
-   # col <- input$col
-    
-    #grid <- input$matrix_output
-    #hidden_grid <- input$matrix_hide
-    
-   # revealed_grid <- flag_cell(grid, input$cell, hidden_grid)
-   # update_input(session, hidden_grid, value = revealed_grid)
-  #})
-  
-  #mettre a jour test 
-  eventReactive(input$flag,{
-    row <- input$row
-    col <- input$col
-    
-    grid <- input$matrix_output
-    hidden_grid <- input$matrix_hide
-    
-    revealed_grid <- flag_cell(grid, input$cell, hidden_grid)
-    update_input(session, hidden_grid, value = revealed_grid)
-                  
-                })
-  #Rejouer
-  #observeEvent(input$replay, {observeEvent(input$flag, {
-    #cell <- as.numeric(input$cell)
-    #z <- flag_cell(cell, z)
-    #output$game <- renderDT(z, escape = FALSE)
-  #})
-    
-#Rejouertest 
-    eventReactive(input$replay,{
-      observeEvent(input$flag, {
-        cell <- as.numeric(input$cell)
-        z <- flag_cell(cell, z)
-        output$game <- renderDT(z, escape = FALSE)
-      
-    })
-  })
-  
-  
-  
-  
+      output$cellule <- renderPlot({
+        cell <- cellule()
+        grid.table(grille)
+      })
 })
+      
 
-
+    #mettre un drapeau
+    observeEvent(input$flag, {
+      matrix_output <- input$grid$matrix_output
+      matrix_hide <- input$grid$matrix_hide
+      cell <- input$cell
+      
+      revealed_grid <- flag_cell(matrix_output, cell)
+      update_input(session,
+                   list(matrix_output = matrix_output, matrix_hide = revealed_grid))
+    })
+    
+    
+  })
+  
+  
+  #Rejouer
+  replay <- eventReactive(input$replay,{
+    resest_game()
+  })
+  
+  
+  
+  
 
 shinyApp(ui = ui, server = server)

@@ -126,22 +126,15 @@ flag <- function(grid){
   }
 }
 
-<<<<<<< HEAD
+
 flag_cell <- function(cell, grid){
   r <- nrow(grid)
   c <- ncol(grid)
   fl <- matrix(data = paste0("-2",1:(r*c)), nrow = r, ncol = c)
   gg <- matrix(data = paste0(emoji("hibiscus"),1:(r*c)), nrow = r, ncol = c)
-=======
 
+}
 
-
-  
->>>>>>> d5123d0a6e17dd67830b33ba437607223f6790a2
-  
-  
-
-<<<<<<< HEAD
 
 
 #grille cachée 
@@ -154,6 +147,7 @@ grid_cachee <- function(grid, r, c){
  return(grid) 
 }
 
+#obtenir l'id de la cellule
 cell_id <- function(grid, r, c){
   n_row <- nrow(grid)
   n_col <- ncol(grid)
@@ -162,11 +156,21 @@ cell_id <- function(grid, r, c){
   return(cell_id)
 }
 
+#obtenir les indices de la cellule
+get_indices <- function(grid, cell_id) {
+  nrow <- dim(grid)[1]
+  ncol <- dim(grid)[2]
+  row <- ((cell_id - 1) %/% ncol) + 1
+  col <- ((cell_id - 1) %% ncol) + 1
+  return(list(row=row, col=col))
+}
+
+
 #mettre à jour la grille 
 maj_grille_case <- function(grid, r, c, grille_cachee) {
   if (grid[r, c] == "M") {
     grille_cachee[grid == "M"] <- "-1"
-=======
+}
 # Fonction pour révéler la case sélectionnée
 reveler_case <- function(grid, r, c) {
   if (grid[r, c] == "M") {
@@ -174,7 +178,7 @@ reveler_case <- function(grid, r, c) {
     grid[grid == "M"] <- emojifont::emoji("bomb")
     print(grid)
     print("Game over!")
->>>>>>> d5123d0a6e17dd67830b33ba437607223f6790a2
+
   } else if (grid[r, c] == "") {
     # si la case est vide alors révéler les cellules adjacentes ne contenant pas de mines
     for (i in -1:1) {
@@ -190,8 +194,8 @@ reveler_case <- function(grid, r, c) {
   }
   grid[r, c] <- "R"
   return(grid)
-}
-<<<<<<< HEAD
+}}
+
 # fonction pour révéler la case
 reveler_case <- function(grid, r, c, grille_cachee) {
   
@@ -229,7 +233,7 @@ reveler_case <- function(grid, r, c, grille_cachee) {
             }
           }
         }
-=======
+}}}}
 
 
 update <- function(grid){
@@ -238,13 +242,11 @@ update <- function(grid){
       if(reveler_case(grid, r, c)==TRUE && grid[r,c]!=M){
         grid <- grid[r,c]
         #finish
->>>>>>> d5123d0a6e17dd67830b33ba437607223f6790a2
+
       }
     }
   }
 }
-
-<<<<<<< HEAD
 
 #révéler case adjacentes
 reveal_adjacent <- function(grid, r, c, grille_cachee, max_revealed) {
@@ -271,40 +273,38 @@ reveal_adjacent <- function(grid, r, c, grille_cachee, max_revealed) {
 ######################################################
 #test des fonctions ci-dessus avant de les mettre dans shiny et tout faire sauter
 
-play_minesweeper <- function(grid) {
-  grille_cachee <- grid_cachee(grid)
-  gameOver <- FALSE
-  while (!gameOver) {
-    print(grille_cachee)
-    r <- as.integer(readline(prompt="Enter row: "))
-    c <- as.integer(readline(prompt="Enter column: "))
-    # if (grille_cachee[r, c] != " ") {
-    #   print("This cell has already been revealed. Please choose another one.")
-    # } else {
-    grille_cachee <- reveler_case(grid, r, c, grille_cachee )
-    #grille_cachee <- reveler_case(as.matrix(grid), r, c, grille_cachee)
-    maj_grille_case(grid, r, c, grille_cachee)
-      if (any(grille_cachee == "M")) {
-         gameOver <- TRUE
-        print("Game over!") }
-      
-  }
-  
-  replay <- readline(prompt = "Do you want to replay? (y/n) ")
-  if(replay=="y"){
-    play_minesweeper(grid)
-  } else {
-    quit(save="default")
-  }
-  }
-#}
-
-
-z <- generate_grid(4, 4, 10)
-y <- grid_cachee(z)
+# play_minesweeper <- function(grid) {
+#   grille_cachee <- grid_cachee(grid)
+#   gameOver <- FALSE
+#   while (!gameOver) {
+#     print(grille_cachee)
+#     r <- as.integer(readline(prompt="Enter row: "))
+#     c <- as.integer(readline(prompt="Enter column: "))
+#     # if (grille_cachee[r, c] != " ") {
+#     #   print("This cell has already been revealed. Please choose another one.")
+#     # } else {
+#     grille_cachee <- reveler_case(grid, r, c, grille_cachee )
+#     #grille_cachee <- reveler_case(as.matrix(grid), r, c, grille_cachee)
+#     maj_grille_case(grid, r, c, grille_cachee)
+#       if (any(grille_cachee == "M")) {
+#          gameOver <- TRUE
+#         print("Game over!") }
+#       
+#   }
+#   
+#   replay <- readline(prompt = "Do you want to replay? (y/n) ")
+#   if(replay=="y"){
+#     play_minesweeper(grid)
+#   } else {
+#     quit(save="default")
+#   }
+#   }
 
 
 
-=======
-z <- generate_grid(10, 11, 16)
->>>>>>> d5123d0a6e17dd67830b33ba437607223f6790a2
+# z <- generate_grid(4, 4, 10)
+# y <- grid_cachee(z)
+
+
+
+
