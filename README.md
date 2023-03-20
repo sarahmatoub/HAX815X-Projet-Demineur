@@ -1,6 +1,6 @@
 # Projet Démineur :
 
-Le but de ce projet est de créer une librairie R incluant une application Shiny permettant de jouer au démineur.Cette dernière  est un package R  qui permet la création d’applications Web notamment des jeux comme dans notre cas , elle dispose des outils puissants qui  aident  à transformer vos analyses en applications interactives .
+Le but de ce projet est de créer une application Shiny permettant de jouer au démineur.Cette dernière  est un package R  qui permet la création d’applications Web notamment des jeux comme dans notre cas , elle dispose des outils puissants qui  aident  à transformer vos analyses en applications interactives .
 
 ## Règles du jeu :
 
