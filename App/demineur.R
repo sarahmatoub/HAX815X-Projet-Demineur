@@ -36,6 +36,7 @@ ui <- fluidPage(
       fluidRow(
         column(width = 10, height=3, 
                actionButton("Valider", icon("check-circle", style = "color: #194d00;"), label="Valider")),
+<<<<<<< HEAD
       hr(),
       numericInput('cell', "Choisir la case à révéler :",
                    1, min = 1, max = 320),
@@ -62,10 +63,38 @@ ui <- fluidPage(
         icon("refresh", style = "color: #4ce600;") ,
         label="Rejouer")
     )))),
+=======
+        hr(),
+        numericInput('reveal', "Choisir la case à révéler :",
+                     1, min = 1, max = 320),
+        fluidRow(
+          column(width = 12, height=3,
+                 actionButton("reveal", icon("fas fa-magic", style = "color: black"), label="Révéler")  
+          )
+        ),
+        
+        hr(),
+        numericInput("flag", "Choisir la case où mettre un drapeau :",
+                     1, min = 1, max = 320),
+        fluidRow(
+          column(width = 12, height=3, 
+                 actionButton(
+                   "flag", icon("bomb"), label="Mettre/retirer un drapeau")
+          )
+        ),
+        hr(),
+        fluidRow(
+          column(width=10,height=3, 
+                 actionButton(
+                   inputId = "replay",
+                   icon("refresh", style = "color: #4ce600;") ,
+                   label="Rejouer")
+          )))),
+>>>>>>> d5123d0a6e17dd67830b33ba437607223f6790a2
     mainPanel(
-       plotOutput("grid", width = "600px" , height="400px")
-                  # click = "cell_reveal",
-                  # dbclick = "flag_cell") # l'argument click est fait pour gérer les clicks (click et double click)
+      plotOutput("grid", width = "600px" , height="400px")
+      # click = "cell_reveal",
+      # dbclick = "flag_cell") # l'argument click est fait pour gérer les clicks (click et double click)
     )
   ))
 
@@ -115,20 +144,20 @@ server <- shinyServer(function(input, output, session) {
     }
     grid
     
-    })
-    
+  })
+  
   
   #Affichage de la grille
-    output$grid <- renderPlot({
+  output$grid <- renderPlot({
     grid <- ma_gr()
-   
+    
     #couleurs des grilles
     #theme grille cachée
     theme1 <- ttheme_default(
       core = list(
         bg_params = list(fill = c("#fff2e6", "#ffe6cc"), col = "#ffcc99"), 
         fg_params = list(col = "blue")),
-        base_size = 16)
+      base_size = 16)
     
     #thème grille affichée
     theme2 <- ttheme_default(
@@ -137,7 +166,7 @@ server <- shinyServer(function(input, output, session) {
         fg_params = list(col = "#00334d")),
       base_size = 16, base_colour = "#005580")
     
-      #générer une grille pour chaque niveau
+    #générer une grille pour chaque niveau
     if (input$Niveau == "Facile") {
       matrix_output = generate_grid(6, 8, 10)
       matrix_hide = grid_cachee(matrix_output)
@@ -155,9 +184,13 @@ server <- shinyServer(function(input, output, session) {
       matrix_hide = grid_cachee(matrix_output)
       grid.table(matrix_hide, theme = theme2)
     }
-   
-  })
     
+  })
+  
+  
+  cellule<-eventReactive(input$cell , {
+    
+<<<<<<< HEAD
     # case à révéler
     my_cell <- eventReactive(input$reveal, {
       cell <- input$cell
@@ -218,10 +251,79 @@ server <- shinyServer(function(input, output, session) {
      
      
    })
+=======
+  }
+>>>>>>> d5123d0a6e17dd67830b33ba437607223f6790a2
     
+  )
+  # case à révéler
+  #observeEvent(input$reveal, {
+    #cell <- input$cell
+   # grid <- input$matrix_output
+   # hidden_grid <- input$matrix_hide
     
+   # revealed_grid <- reveler_case(grid, row, col, hidden_grid)
+    #update_input(session, hidden_grid, value = revealed_grid)
+  #})
+  
+  # case à reveler test 
+  eventReactive(input$reveal ,  {
+    cellule <- eventReactive(input$cell,{
     
+    })
+    grid <- input$matrix_output
+    hidden_grid <- input$matrix_hide
     
+    revealed_grid <- reveler_case(grid, row, col, hidden_grid)
+    update_input(session, hidden_grid, value = revealed_grid)
+  
+  })
+  
+  
+  # mettre un drapeau
+  #observeEvent(input$flag, {
+   # row <- input$row
+   # col <- input$col
+    
+    #grid <- input$matrix_output
+    #hidden_grid <- input$matrix_hide
+    
+   # revealed_grid <- flag_cell(grid, input$cell, hidden_grid)
+   # update_input(session, hidden_grid, value = revealed_grid)
+  #})
+  
+  #mettre a jour test 
+  eventReactive(input$flag,{
+    row <- input$row
+    col <- input$col
+    
+    grid <- input$matrix_output
+    hidden_grid <- input$matrix_hide
+    
+    revealed_grid <- flag_cell(grid, input$cell, hidden_grid)
+    update_input(session, hidden_grid, value = revealed_grid)
+                  
+                })
+  #Rejouer
+  #observeEvent(input$replay, {observeEvent(input$flag, {
+    #cell <- as.numeric(input$cell)
+    #z <- flag_cell(cell, z)
+    #output$game <- renderDT(z, escape = FALSE)
+  #})
+    
+#Rejouertest 
+    eventReactive(input$replay,{
+      observeEvent(input$flag, {
+        cell <- as.numeric(input$cell)
+        z <- flag_cell(cell, z)
+        output$game <- renderDT(z, escape = FALSE)
+      
+    })
+  })
+  
+  
+  
+  
 })
 
 

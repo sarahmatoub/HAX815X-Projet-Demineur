@@ -3,6 +3,14 @@ rows = 6
 cols = 8
 mines = 10
 
+replace <- function(x){
+  color <- c("#99ff33", "#b3ff66", "#b3d9ff", "#cc99ff", "#ff99cc")
+  if(x==-1){
+    return(emoji("bomb"))
+  } else{
+    return(text("x", col=color))
+  }
+}
 
 # Générer une grille de démineur
 generate_grid <- function(rows, cols, mines) {
@@ -67,6 +75,36 @@ mines_count <- function(grid){
 }
 
 
+# Fonction pour révéler la case sélectionnée
+reveler_case <- function(grid, r, c) {
+  if (grid[r, c] == "M") {
+    # Si toutes les cellules contiennent une mine alors afficher game over
+    grid[grid == "M"] <- emojifont::emoji("bomb")
+    print(grid)
+    print("Game over!")
+  } else if (grid[r, c] == "") {
+    # si la case est vide alors révéler les cellules adjacentes ne contenant pas de mines
+    for (i in -1:1) {
+      for (j in -1:1) {
+        if (r+i >= 1 && r+i <= nrow(grid) && c+j >= 1 && c+j <= ncol(grid)) {
+          if (grid[r+i, c+j] != "M" && grid[r+i, c+j] != "R") {
+            grid[r+i, c+j] <- "R"
+            grid <- reveler_case(grid, r+i, c+j)
+            if (grid[r+i, c+j] == "") {
+              grid[r+i, c+j] <- "R"
+              grid <- reveler_case(grid, r+i, c+j)
+            }
+            
+          }
+        } 
+      }
+    }
+  }
+  grid[r, c] <- "R"
+  return(grid)
+}
+
+
 #gérer le clic groit
 clic_droit <- function(event){
   if(event$type == "click" && event$button == "right"){
@@ -88,24 +126,22 @@ flag <- function(grid){
   }
 }
 
+<<<<<<< HEAD
 flag_cell <- function(cell, grid){
   r <- nrow(grid)
   c <- ncol(grid)
   fl <- matrix(data = paste0("-2",1:(r*c)), nrow = r, ncol = c)
   gg <- matrix(data = paste0(emoji("hibiscus"),1:(r*c)), nrow = r, ncol = c)
-  
-  row <- ceiling(cell/c)
-  col <- cell - (row-1)*c
-  
-  if (grid[row, col]==fl[row, col]){
-    grid[row, col] <- gg[row, col]
-    return(grid)
-  } else{
-    grid[row, col] <- fl[row, col]
-    return(grid)
-  }
-}
+=======
 
+
+
+  
+>>>>>>> d5123d0a6e17dd67830b33ba437607223f6790a2
+  
+  
+
+<<<<<<< HEAD
 
 
 #grille cachée 
@@ -130,22 +166,32 @@ cell_id <- function(grid, r, c){
 maj_grille_case <- function(grid, r, c, grille_cachee) {
   if (grid[r, c] == "M") {
     grille_cachee[grid == "M"] <- "-1"
+=======
+# Fonction pour révéler la case sélectionnée
+reveler_case <- function(grid, r, c) {
+  if (grid[r, c] == "M") {
+    # Si toutes les cellules contiennent une mine alors afficher game over
+    grid[grid == "M"] <- emojifont::emoji("bomb")
+    print(grid)
+    print("Game over!")
+>>>>>>> d5123d0a6e17dd67830b33ba437607223f6790a2
   } else if (grid[r, c] == "") {
-    grille_cachee[r, c] <- grid[r, c]
+    # si la case est vide alors révéler les cellules adjacentes ne contenant pas de mines
     for (i in -1:1) {
       for (j in -1:1) {
         if (r+i >= 1 && r+i <= nrow(grid) && c+j >= 1 && c+j <= ncol(grid)) {
-          if (grid[r+i, c+j] != "M" && grille_cachee[r+i, c+j] == "") {
-            grille_cachee <- maj_grille_case(grid, r+i, c+j, grille_cachee)
+          if (grid[r+i, c+j] != "M" && grid[r+i, c+j] != "R") {
+            grid[r+i, c+j] <- "R"
+            grid <- reveler_case(grid, r+i, c+j)
           }
-        }
+        } 
       }
     }
-  } else {
-    grille_cachee[r, c] <- grid[r, c]
   }
-  return(grille_cachee)
+  grid[r, c] <- "R"
+  return(grid)
 }
+<<<<<<< HEAD
 # fonction pour révéler la case
 reveler_case <- function(grid, r, c, grille_cachee) {
   
@@ -183,25 +229,22 @@ reveler_case <- function(grid, r, c, grille_cachee) {
             }
           }
         }
+=======
+
+
+update <- function(grid){
+  for(r in 1:nrow(grid)){
+    for(c in 1:ncol(grid)){
+      if(reveler_case(grid, r, c)==TRUE && grid[r,c]!=M){
+        grid <- grid[r,c]
+        #finish
+>>>>>>> d5123d0a6e17dd67830b33ba437607223f6790a2
       }
     }
-    
-    # reveal up to max_revealed adjacent cells that do not contain mines
-    if (max_revealed > 0) {
-      revealed <- reveal_adjacent(grid, r, c, grille_cachee, max_revealed)
-      grille_cachee <- revealed
-    }
-    
-  } else {
-    grille_cachee[r, c] <- grid[r, c]
   }
-  
-  if(all(grid[grille_cachee != "?"] == "M")){
-    print("Congratulations! You won!")
-  }
-  return(grille_cachee)
 }
 
+<<<<<<< HEAD
 
 #révéler case adjacentes
 reveal_adjacent <- function(grid, r, c, grille_cachee, max_revealed) {
@@ -262,3 +305,6 @@ y <- grid_cachee(z)
 
 
 
+=======
+z <- generate_grid(10, 11, 16)
+>>>>>>> d5123d0a6e17dd67830b33ba437607223f6790a2
